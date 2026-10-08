@@ -1,6 +1,13 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/SphereIQ.Core/SphereIQ.Core.csproj" />
+    <Project Path="src/SphereIQ.Reports/SphereIQ.Reports.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SphereIQ.Core.Tests/SphereIQ.Core.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Probe/Probe.csproj" />
   </Folder>
   <Project Path="Ezy-Nav.csproj" />
 </Solution>

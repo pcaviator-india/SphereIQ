@@ -358,6 +358,11 @@ public class DrillHoleFile
 				stream.Close();
 				return OpenFile_ErrorsEnum.DeSerialisationError;
 			}
+			catch (NotSupportedException)
+			{
+				stream.Close();
+				return OpenFile_ErrorsEnum.DeSerialisationError;
+			}
 			catch (InvalidDataException)
 			{
 				stream.Close();

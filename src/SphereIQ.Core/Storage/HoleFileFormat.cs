@@ -42,15 +42,34 @@ namespace EzyPlanStorage
             public string Client { get; set; }
             public DateTime CreatedDate { get; set; }
             public decimal SideTrackMD { get; set; }
-            public SurveyList SurveyList { get; set; }
-            public Collar Collar { get; set; }
-            public Target Target { get; set; }
-            public ReportList ReportList { get; set; }
+            public List<SurveyRow> Surveys { get; set; }
+            public CollarDto Collar { get; set; }
+            public TargetDto Target { get; set; }
+        }
+
+        public sealed class SurveyRow
+        {
+            public decimal MD { get; set; }
+            public decimal Dip { get; set; }
+            public decimal Azimuth { get; set; }
+        }
+
+        public sealed class CollarDto
+        {
+            public decimal Easting { get; set; }
+            public decimal Northing { get; set; }
+        }
+
+        public sealed class TargetDto
+        {
+            public decimal Easting { get; set; }
+            public decimal Northing { get; set; }
+            public decimal TVD { get; set; }
         }
 
         public static HoleFileDto FromFile(DrillHoleFile file)
         {
-            return new HoleFileDto
+            HoleFileDto dto = new HoleFileDto
             {
                 HoleID = file.HoleID,
                 RigID = file.RigID,
@@ -61,11 +80,18 @@ namespace EzyPlanStorage
                 Client = file.Client,
                 CreatedDate = file.CreatedDate,
                 SideTrackMD = file.SideTrackMD,
-                SurveyList = file.SurveyList,
-                Collar = file.Collar,
-                Target = file.Target,
-                ReportList = file.ReportList
+                Surveys = new List<SurveyRow>(),
+                Collar = file.Collar != null ? new CollarDto { Easting = file.Collar.Easting, Northing = file.Collar.Northing } : null,
+                Target = file.Target != null ? new TargetDto { Easting = file.Target.Easting, Northing = file.Target.Northing, TVD = file.Target.TVD } : null
             };
+            if (file.SurveyList != null)
+            {
+                foreach (Survey s in file.SurveyList)
+                {
+                    dto.Surveys.Add(new SurveyRow { MD = s.MD, Dip = s.Dip, Azimuth = s.Azimuth });
+                }
+            }
+            return dto;
         }
 
         public static void ApplyTo(HoleFileDto dto, DrillHoleFile file)
@@ -79,10 +105,24 @@ namespace EzyPlanStorage
             file.Client = dto.Client;
             file.SetCreatedDate(dto.CreatedDate);
             file.SideTrackMD = dto.SideTrackMD;
-            file.SurveyList = dto.SurveyList ?? new SurveyList();
-            file.Target = dto.Target != null ? new Target(dto.Target) : null;
-            file.Collar = dto.Collar != null ? new Collar(dto.Collar) : null;
-            file.ReportList = dto.ReportList != null ? new ReportList(dto.ReportList) : new ReportList();
+            SurveyList list = new SurveyList();
+            if (dto.Surveys != null)
+            {
+                foreach (SurveyRow row in dto.Surveys)
+                {
+                    Survey s = new Survey();
+                    if (s.SetMD(row.MD) == Survey.SetMDEnum.ValueSet
+                        && s.SetDip(row.Dip) == Survey.SetDipEnum.ValueSet
+                        && s.SetAzimuth(row.Azimuth) == Survey.SetAzimuthEnum.ValueSet)
+                    {
+                        list.Append(s);
+                    }
+                }
+            }
+            file.SurveyList = list;
+            file.Target = dto.Target != null ? new Target(dto.Target.Easting, dto.Target.Northing, dto.Target.TVD) : null;
+            file.Collar = dto.Collar != null ? new Collar(dto.Collar.Easting, dto.Collar.Northing) : null;
+            file.ReportList = new ReportList();
         }
 
         public static void Write(Stream stream, DrillHoleFile file)

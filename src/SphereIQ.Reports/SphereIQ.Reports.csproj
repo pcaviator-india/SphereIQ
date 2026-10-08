@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Phase 1: portable report document model — zero WinForms/GDI, builds for osx-arm64 + windows. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>SphereIQ.Reports</RootNamespace>
+    <AssemblyName>SphereIQ.Reports</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SphereIQ.Core\SphereIQ.Core.csproj" />
+  </ItemGroup>
+
+</Project>
