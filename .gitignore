@@ -3,6 +3,9 @@ bin/
 obj/
 publish/
 
+# Decompile reconnaissance (regenerable via ilspycmd, not source of truth)
+decompile-recon/
+
 # IDE
 .vs/
 .vscode/

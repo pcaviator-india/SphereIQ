@@ -8,8 +8,8 @@
 1. **Proprietary Ezy\* DLL sources will be obtained via ILSpy decompilation** (`..\ILSpy_windows_selfcontained_1.1.0.9782-x64` is available in the backup folder) — no need to hunt for original source.
 2. **No licensing system in the ported app** — the product becomes completely free. CrypKey DRM and all licensing artifacts are **removed outright, not replaced**; no license validation code ships.
 3. **Zero feature reduction** — every feature must survive the port (all 61 screens, Fax reports, USB-drive detection, file-type icons, charts, print/preview). Feature-cut options in this plan are void.
-4. **Target framework: `net8.0` (LTS)** — chosen for long-term support and stability; app multi-targets `net8.0-windows` (Windows keeps shipping) and `net8.0-osx-arm64` (M-series).
-5. **UI framework: Avalonia 11.x** — confirmed per recommendation (Option A).
+4. **Target framework: `net8.0` (LTS)** — CONFIRMED per recommendation (stability + LTS; Windows ships `net8.0-windows`, Mac ships `net8.0` + `osx-arm64` RID).
+5. **UI framework: Avalonia 11.x** — CONFIRMED per recommendation (Option A).
 
 **All Phase 0 decisions are now closed.** Remaining Phase 0 items are operational (Apple Developer account, repo hygiene, green baseline build).
 
@@ -33,14 +33,14 @@
 
 | Assembly | Kind | WinForms/GDI bound? | Portability verdict |
 |---|---|---|---|
-| `EzyNavMath.dll` | Proprietary, managed | **No** | ✅ Likely portable as-is (pure logic) |
-| `EzyPlanMath.dll` | Proprietary, managed | **No** | ✅ Likely portable as-is |
-| `EzyPlanStorage.dll` | Proprietary, managed | **No** | ✅ Likely portable as-is (verify file I/O paths) |
-| `EzyWizard.dll` | Proprietary, managed | **No** | ✅ Likely portable as-is |
+| `EzyNavMath.dll` (2 files) | Proprietary, managed | **No** | ✅ Portable — pure math over `EzyPlanData`/`EzyPlanMath` types, zero Windows touches |
+| `EzyPlanMath.dll` (34 files) | Proprietary, managed (VB-origin) | **No WinForms** — needs `Microsoft.VisualBasic` NuGet + `System.Configuration` (MySettings) | ✅ Portable once VB runtime package referenced; error-enum classes are plain logic |
+| `EzyPlanStorage.dll` (`DrillHoleFile`, 2 files) | Proprietary, managed | **No WinForms — but uses `BinaryFormatter`** (`BinaryFormatter` deserialization of `.ezy` hole files) | ⚠️ Portable only after serialization migration: `BinaryFormatter` is **removed/blocked in net8** — must write a compat reader for legacy files + move to `System.Text.Json`/protobuf going forward |
+| `EzyWizard.dll` (9 files) | Proprietary, managed | **No** — `IWizardForm`/`EzyWizard` orchestration is UI-free (no WinForms usings) | ✅ Portable as logic; Avalonia implements `IWizardForm` later |
 | `LumenWorks.Framework.IO.dll` | OSS (CSV reader), managed | **No** | ✅ Portable (or swap to NuGet `LumenWorks.Framework.IO.Core`) |
-| `EzyNavCharting.dll` (`EzyNavHoleChart` control) | Proprietary, managed | **Yes (WinForms + GDI)** | ⚠️ Source via ILSpy decompilation, then port (Nevron calls must be replaced) |
-| `EzyPlanData.dll` | Proprietary, managed | **Yes (WinForms + GDI)** | ⚠️ Source via ILSpy; strip `System.Windows.Forms` coupling |
-| `EzyReport.dll` | Proprietary, managed | **Yes (WinForms + GDI)** | ⚠️ Source via ILSpy; re-express report rendering |
+| `EzyPlanData.dll` (29 files) | Proprietary, managed | **3 small touches only:** `DrillHoleStatus.MinimumDLStateColor` (`System.Drawing.Color`), `SortableBindingList<T>` (`BindingList<T>`+`ITypedList`), `Settings` (`System.Configuration`) | ✅ Portable after: `Color`→own struct/string, `SortableBindingList`→`ObservableCollection`+LINQ sort, settings→JSON |
+| `EzyNavCharting.dll` (`EzyNavHoleChart` + controller, 6 files) | Proprietary, managed | **Yes — `NChartControl` + full WinForms controller UI** | ⚠️ Logic (chart data prep) separable; rendering must be reimplemented on OxyPlot |
+| `EzyReport.dll` (11 files) | Proprietary, managed | **Yes — `Report : PrintDocument` (WinForms printing), `ReportViewer*` controls, `IReportTemplate.Controls` (`Control.ControlCollection`), PdfSharp 1.x** | ⚠️ Split required: report *models/templates* portable; `PrintDocument`/viewer replaced by PDFsharp-6/QuestPDF pipeline + Avalonia preview |
 | `Nevron.System/Presentation/Chart(.WinForm)/GraphicsGL.dll` | Commercial 3rd party | **Yes — WinForms/OpenGL Windows** | ❌ Blocked — **no macOS build exists**; must be replaced (OxyPlot); existing `NLicense` activation code deleted |
 | `PdfSharp.dll` (old v1.x) | OSS | **Yes (GDI+ / System.Drawing)** | ⚠️ Must upgrade to PDFsharp ≥6 (cross-platform) or QuestPDF |
 | `Fixed RibbonMenuButton.dll`, `MultipleSelectionDataGridView.dll` | 3rd party WinForms controls | Yes | ❌ Must be replaced/reimplemented |
@@ -61,8 +61,10 @@
 | `Icon.FromHandle` usages | GDI icon handles | Needs replacement (SkiaSharp/ImageSharp) |
 | `Program.cs` | Named `Mutex` single-instance | Works on modern .NET on macOS — verify |
 | `app.config` / `Properties\Settings.cs` | `System.Configuration` (not in modern .NET by default) | Needs package or JSON migration |
-| `Report_Fax*` files | Fax cover sheets (report templates) | **Feature must be preserved** — likely report-only (portable) but verify no fax-service dependency during Phase 1 analysis |
-| `Popup_ReportPreview.cs`, `Report_*` | WinForms print preview | Re-express as PDF preview (PdfSharp already in stack) |
+| `Report_Fax*` files | Fax cover sheet report templates (**confirmed report-only**: just `FromFax`/`ToFax` string labels on the cover page, no fax-service API in app or DLLs) | **Portable — render as PDF** (visual parity, no transport) |
+| `Popup_ReportPreview.cs`, `Report_*` | WinForms print preview + `EzyReport.Report : PrintDocument` | Re-express as PDF preview (PDFsharp 6/QuestPDF pipeline) |
+| `EzyPlanStorage.DrillHoleFile` | **`BinaryFormatter` deserialization** of `.ezy` hole files (blocked in net8) | Compat reader for legacy files + new-format save; **blocks file open** until solved |
+| `EzyPlanMath` (VB-origin) | `Microsoft.VisualBasic` + `MySettings` (`System.Configuration`) | `Microsoft.VisualBasic` NuGet + JSON settings |
 
 ### 1.4 Key conclusion
 
@@ -278,11 +280,11 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 ---
 
 ## 8. Immediate Next Actions
-1. Confirm the two open Phase 0 items: target framework (`net8.0` LTS recommended) and UI framework (Avalonia). *Licensing, decompilation source, and feature-parity questions are already closed.*
+1. ~~Confirm the two open Phase 0 items~~ **DONE — locked:** `net8.0` LTS + Avalonia 11.x.
 2. Acquire an Apple Silicon Mac + enroll in the Apple Developer Program (needed for notarization even for a free app).
-3. Set up repo hygiene (`.gitignore`) and confirm a green baseline Windows build.
-4. Begin Phase 1 extraction (`SphereIQ.Core`) with unit tests — zero UI risk, immediate cross-platform proof.
-5. Run ILSpy on the four Ezy\* DLLs (`EzyNavCharting`, `EzyPlanData`, `EzyReport`, `EzyWizard`) as a reconnaissance step to size the decompilation cleanup and confirm no hidden Windows-only API calls beyond those catalogued here.
+3. ~~Set up repo hygiene (`.gitignore`) and confirm a green baseline Windows build.~~ **DONE — `.gitignore`, baseline commit `132be11` (green net20 build).**
+4. ~~Begin Phase 1 extraction (`SphereIQ.Core`) with unit tests~~ → **IN PROGRESS** — decompile-recon complete (7 DLLs, 91 files inventoried; see §1.2/§1.3). Findings: Fax confirmed report-only; `EzyPlanMath` needs VB runtime NuGet; `EzyPlanStorage` needs `BinaryFormatter` compat work; `EzyPlanData` has 3 small touches; `EzyReport`/`EzyNavCharting` need reimplementation splits.
+5. ~~Run ILSpy reconnaissance~~ **DONE.**
 
 ---
 *This plan was produced by static code/dependency analysis only; no application code was modified.*
