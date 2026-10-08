@@ -1,0 +1,26 @@
+# Build outputs
+bin/
+obj/
+publish/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# NuGet
+*.nupkg
+packages/
+
+# Test results
+TestResults/
+*.trx
+
+# macOS
+.DS_Store
+
+# Signing (never commit)
+*.p12
+*.cer
+*.mobileprovision

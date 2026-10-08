@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Ezy-Nav</AssemblyName>
+    <ApplicationIcon>SphereIQ.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>True</UseWindowsForms>
+    <TargetFramework>net20</TargetFramework>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Ezy-Nav.exe.licenses" />
+    <EmbeddedResource Include="Ezy-Nav.exe.licenses" LogicalName="Ezy-Nav.exe.licenses" />
+    <ApplicationConfig Remove="Ezy-Nav.exe.config" />
+    <ApplicationConfig Include="Ezy-Nav.exe.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EzyReport">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\EzyReport.dll</HintPath>
+    </Reference>
+    <Reference Include="EzyWizard">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\EzyWizard.dll</HintPath>
+    </Reference>
+    <Reference Include="EzyPlanData">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\EzyPlanData.dll</HintPath>
+    </Reference>
+    <Reference Include="EzyNavCharting">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\EzyNavCharting.dll</HintPath>
+    </Reference>
+    <Reference Include="EzyPlanStorage">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\EzyPlanStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Fixed RibbonMenuButton">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\Fixed RibbonMenuButton.dll</HintPath>
+    </Reference>
+    <Reference Include="EzyNavMath">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\EzyNavMath.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.System">
+      <HintPath>..\rstudio\2iC Australia\Ezy-Nav\Nevron.System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+</Project>
