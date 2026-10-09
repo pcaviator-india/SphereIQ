@@ -188,12 +188,15 @@ SphereIQ.sln
 ### Phase 3 — Avalonia UI port (bulk of the work)
 Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 
-> 🚧 **In progress (commit `6edae76`):** Slice 1 **Welcome** + Slice 2 **OpenHoleFile** are live in Avalonia (`SphereIQ.App` scaffold: single-instance mutex, `AppSession`, `ScreenFactory`, back-stack `MainWindow` shell). `OpenHoleFile` replaces the Windows drive-box/list with the native file picker (`StorageProvider.OpenFilePickerAsync` → Finder on macOS / Explorer on Windows), filtered to `.ezn`; on `NoError` it opens via `DrillHoleFile.Open` and navigates to HolePlanning, on error shows `ExplainError` inline. Remaining screens still render as `PlaceholderScreen` so navigation never dead-ends. Build green, 16 tests pass.
+> 🚧 **In progress (commit `8b30682`):** Avalonia `SphereIQ.App` scaffold is live — single-instance mutex, `AppSession`, `ScreenFactory`, back-stack `MainWindow` shell. Native file picker replaces the Windows drive-box/list (`StorageProvider.OpenFilePickerAsync` → Finder on macOS / Explorer on Windows), filtered to `.ezn`; on `NoError` it opens via `DrillHoleFile.Open`. Hole-file format migrated to JSON. All business logic is ported UI-free into `SphereIQ.Reports`: `HoleChartData` (all chart `Set*` series), `ReportDocument`/`ReportPdfRenderer` (PDF via PdfSharp 6), and `HolePlanningEngine` (1:1 port of `DisplayCalculatedData` incl. MinDL state + sidetrack branching). OxyPlot `ChartHost` renders `HoleChartData`, replacing Nevron. Remaining screens render as `PlaceholderScreen` so navigation never dead-ends. Build green, 19 tests pass.
 
 **Slice tracker:**
 - [x] Slice 1: Splash + Welcome
 - [x] Slice 2: Open file (native file picker; Create file TBD)
+- [x] Create New Hole wizard (3 steps + native save picker)
+- [x] Charting foundation: `HoleChartData` + OxyPlot `ChartHost` + `HolePlanningEngine` (logic, UI-free, tested)
 - [ ] Slice 3: Hole management (+ toolbar)
+- [ ] Slice 4: Hole planning screen (wire engine + ChartHost + result fields)
 - [ ] Slice 4: Hole planning (+ advanced popups)
 - [ ] Slice 5: Edit survey data (grids — heaviest control port)
 - [ ] Slice 6: Import CSV flows (exercises `ICsvReader` + `Body_Import_*`)
