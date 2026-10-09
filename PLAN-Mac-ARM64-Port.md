@@ -188,6 +188,8 @@ SphereIQ.sln
 ### Phase 3 — Avalonia UI port (bulk of the work)
 Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 
+> 🚧 **In progress (commit `9e2ca7b`):** `SphereIQ.App` scaffold (single-instance mutex, `AppSession`, `ScreenFactory`, back-stack `MainWindow` shell) + **Welcome** screen live in Avalonia; all other targets render as `PlaceholderScreen` so navigation never dead-ends. Build green, 16 tests pass, solution cleaned of dangling `tools/Probe` ref.
+
 1. **Scaffold** `SphereIQ.App` (Avalonia + service wiring); port `Program.Main` (single-instance mutex, splash, global exception handlers).
 2. **Port shell first:** `Form_MainForm` → Avalonia `MainWindow` (header, toolbar, body/info/fill panels, screen title, chart region, context menus).
 3. **Port by workflow** (one `Procedure_*` per slice, with its `Body_*`/`Popup_*`/`Toolbar_*` views):
