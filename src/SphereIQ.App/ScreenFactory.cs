@@ -17,6 +17,8 @@ namespace SphereIQ.App
                     return new Screens.WelcomeScreen();
                 case ScreenId.OpenHoleFile:
                     return new Screens.OpenHoleFileScreen();
+                case ScreenId.CreateNewHole:
+                    return new Screens.CreateNewHoleScreen();
                 default:
                     return new Screens.PlaceholderScreen(id);
             }
