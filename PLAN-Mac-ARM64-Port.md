@@ -195,7 +195,7 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 - [x] Slice 2: Open file (native file picker; Create file TBD)
 - [x] Create New Hole wizard (3 steps + native save picker)
 - [x] Charting foundation: `HoleChartData` + OxyPlot `ChartHost` + `HolePlanningEngine` (logic, UI-free, tested)
-- [ ] Slice 3: Hole management (+ toolbar)
+- [x] Slice 3: Hole management (+ toolbar)
 - [ ] Slice 4: Hole planning screen (wire engine + ChartHost + result fields)
 - [ ] Slice 4: Hole planning (+ advanced popups)
 - [ ] Slice 5: Edit survey data (grids — heaviest control port)
