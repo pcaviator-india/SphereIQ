@@ -188,7 +188,18 @@ SphereIQ.sln
 ### Phase 3 — Avalonia UI port (bulk of the work)
 Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 
-> 🚧 **In progress (commit `9e2ca7b`):** `SphereIQ.App` scaffold (single-instance mutex, `AppSession`, `ScreenFactory`, back-stack `MainWindow` shell) + **Welcome** screen live in Avalonia; all other targets render as `PlaceholderScreen` so navigation never dead-ends. Build green, 16 tests pass, solution cleaned of dangling `tools/Probe` ref.
+> 🚧 **In progress (commit `6edae76`):** Slice 1 **Welcome** + Slice 2 **OpenHoleFile** are live in Avalonia (`SphereIQ.App` scaffold: single-instance mutex, `AppSession`, `ScreenFactory`, back-stack `MainWindow` shell). `OpenHoleFile` replaces the Windows drive-box/list with the native file picker (`StorageProvider.OpenFilePickerAsync` → Finder on macOS / Explorer on Windows), filtered to `.ezn`; on `NoError` it opens via `DrillHoleFile.Open` and navigates to HolePlanning, on error shows `ExplainError` inline. Remaining screens still render as `PlaceholderScreen` so navigation never dead-ends. Build green, 16 tests pass.
+
+**Slice tracker:**
+- [x] Slice 1: Splash + Welcome
+- [x] Slice 2: Open file (native file picker; Create file TBD)
+- [ ] Slice 3: Hole management (+ toolbar)
+- [ ] Slice 4: Hole planning (+ advanced popups)
+- [ ] Slice 5: Edit survey data (grids — heaviest control port)
+- [ ] Slice 6: Import CSV flows (exercises `ICsvReader` + `Body_Import_*`)
+- [ ] Slice 7: Build to target, Extrapolate, Trend analysis, Side track, Edit details (results screens + charts)
+- [ ] Slice 8: Reports & preview (`Popup_ReportPreview`, `Popup_Report_*`, Fax screens — **mandatory, zero feature reduction**)
+- [ ] Slice 9: Misc popups (message boxes, password, working indicator)
 
 1. **Scaffold** `SphereIQ.App` (Avalonia + service wiring); port `Program.Main` (single-instance mutex, splash, global exception handlers).
 2. **Port shell first:** `Form_MainForm` → Avalonia `MainWindow` (header, toolbar, body/info/fill panels, screen title, chart region, context menus).
