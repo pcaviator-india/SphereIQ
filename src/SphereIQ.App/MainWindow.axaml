@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="SphereIQ.App.MainWindow"
+        Title="SphereIQ"
+        Width="1100" Height="760"
+        MinWidth="960" MinHeight="600">
+  <Grid RowDefinitions="Auto,*">
+    <Border Grid.Row="0" Background="#F5F6F8" Padding="16,10">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+          <TextBlock x:Name="TitleText" FontSize="20" FontWeight="SemiBold" Text="Welcome" />
+          <TextBlock x:Name="SubtitleText" FontSize="12" Opacity="0.6" Text="" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
+          <TextBlock x:Name="HoleFileText" FontSize="12" Opacity="0.7" VerticalAlignment="Center" Text="" />
+          <Button x:Name="BackButton" Content="Back" IsVisible="False" Click="OnBack" />
+          <Button x:Name="ExitButton" Content="Exit" Click="OnExit" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    <ContentControl x:Name="ScreenHost" Grid.Row="1" />
+  </Grid>
+</Window>

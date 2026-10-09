@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/SphereIQ.App/SphereIQ.App.csproj" />
     <Project Path="src/SphereIQ.Core/SphereIQ.Core.csproj" />
     <Project Path="src/SphereIQ.Reports/SphereIQ.Reports.csproj" />
   </Folder>
