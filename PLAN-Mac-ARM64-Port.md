@@ -250,7 +250,17 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 > (item 5), Dock behaviour (item 8) and Retina rendering (item 9) — all need
 > the Apple Silicon Mac. Items 2/4/5 also still need the `ISettingsStore`,
 > `IRemovableMediaMonitor` and `IFileIconService` interfaces that Phase 1 §2
-> specified and which do not exist in `src/` yet.
+> specified and which do not exist in `src/` yet. Shipped as commit `6415af2`.
+>
+> **To test on the Mac:**
+> ```
+> ./build/make-app.sh                      # packages artifacts/publish/osx-arm64
+> artifacts/app/SphereIQ.app/Contents/MacOS/SphereIQ   # run from Terminal
+> cat ~/Library/Application\ Support/SphereIQ/Logs/sphereiq.log
+> ```
+> The `[env] SphereIQ 1.0.0+<sha> | runtime ... | procarch Arm64 ...` banner
+> confirms the arm64 runtime started. The script only packages — `dotnet
+> publish` must have run first (on Windows, or on the Mac with the arm64 SDK).
 
 1. **App bundle:** produce `SphereIQ.app` with `Info.plist` (bundle id, version from `Settings.ProductVersion`, `LSMinimumSystemVersion`, document-type associations for the drill-hole file extension, `NSHighResolutionCapable` Retina keys).
 2. **Menus:** native macOS menu bar — app menu (About/Preferences/Quit), Edit menu (Cmd+C/V/Z must work), Window menu; convert `Ctrl` shortcuts to `Cmd`.
