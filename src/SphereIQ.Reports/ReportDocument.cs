@@ -4,7 +4,7 @@ using EzyPlanData;
 
 namespace SphereIQ.Reports
 {
-    public sealed class ReportDocument
+    public sealed partial class ReportDocument
     {
         public string ReportName { get; set; }
         public string ReportAuthor { get; set; }
@@ -24,29 +24,9 @@ namespace SphereIQ.Reports
                 rows.Add(new string[] { s.MD.ToString(), s.Dip.ToString(), s.Azimuth.ToString(), s.TVD.ToString(), s.Northing.ToString(), s.Easting.ToString(), s.DL.ToString() });
             AppendTablePage(pageName, cols, rows);
         }
-        public void AppendExtrapolatedPage(string pageName, IEnumerable<ExtrapolatedAbsoluteSurvey> surveys)
-        {
-            string[] cols = new string[] { "MD", "Dip", "Azi", "TVD", "Northing", "Easting", "DL", "Toolface" };
-            List<string[]> rows = new List<string[]>();
-            foreach (ExtrapolatedAbsoluteSurvey s in surveys)
-                rows.Add(new string[] { s.MD.ToString(), s.Dip.ToString(), s.Azimuth.ToString(), s.TVD.ToString(), s.Northing.ToString(), s.Easting.ToString(), s.DL.ToString(), s.Toolface.ToString() });
-            AppendTablePage(pageName, cols, rows);
-        }
         public void AppendCoverPage(string pageName, string title, string subtitle)
         { Pages.Add(new ReportPage { PageName = pageName, Kind = ReportPageKind.Cover, Title = title, Subtitle = subtitle }); }
         public void AppendHoleStatusPage(string pageName, DrillHoleStatus status)
         { Pages.Add(new ReportPage { PageName = pageName, Kind = ReportPageKind.HoleStatus, HoleStatusText = status?.MinimumDLStateString, HoleStatusSeverity = status?.MinimumDLSeverity ?? MinDLSeverity.Ok }); }
-    }
-    public enum ReportPageKind { Cover, Table, HoleStatus, Chart }
-    public sealed class ReportPage
-    {
-        public string PageName { get; set; }
-        public ReportPageKind Kind { get; set; }
-        public string[] Columns { get; set; }
-        public List<string[]> Rows { get; set; }
-        public string Title { get; set; }
-        public string Subtitle { get; set; }
-        public string HoleStatusText { get; set; }
-        public MinDLSeverity HoleStatusSeverity { get; set; }
     }
 }
