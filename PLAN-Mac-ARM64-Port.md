@@ -172,6 +172,7 @@ SphereIQ.sln
 4. Cross-platform proof: build Core/Reports with `dotnet build -r osx-arm64` (logic-only assemblies must compile for non-Windows).
 
 **Exit criteria:** Core/Reports compile with no `System.Windows.Forms` reference; tests pass; Windows app still works (still WinForms at this point).
+✅ **Phase 1 DONE (commits `12574be`, `5949276`):** `SphereIQ.Core` (data+math+storage+Wizard logic, net8.0, 0 errors, JSON `.ezn` format) + `SphereIQ.Reports` (report/chart models) + 9 xUnit tests green; legacy `.ezn` BinaryFormatter detected via magic header with converter guidance.
 
 ### Phase 2 — Replace Windows-only dependencies
 0. **Decompile first:** run ILSpy on `EzyNavCharting.dll`, `EzyPlanData.dll`, `EzyReport.dll`, `EzyWizard.dll` → import as source projects (`SphereIQ.Charting`, `SphereIQ.Core` parts) → **strip all CrypKey/licensing calls and any residual WinForms coupling** during import.
@@ -182,6 +183,7 @@ SphereIQ.sln
 5. **Licensing removal (not replacement):** delete CrypKey artifacts (`CKS.exe`, `SetupEx.exe`, `crp32dll.dll`, `crp64DLL.dll`, `CrypKeyNET2.dll`, `crp32002.ngn`, `ezyplan.lic`, `ezyplan.ckn`, `Ezy-Nav.exe.licenses`) from the repo/distribution, remove the Nevron `NLicense`/`NLicenseManager` activation lines, and grep decompiled sources for any CrypKey invocation to ensure nothing references them at runtime. No validation code ships — the app is free.
 
 **Exit criteria:** no Nevron, no CrypKey, no PdfSharp-1.x, no WinForms-only controls in the dependency graph (`dotnet list package` audit clean); zero references to any licensing code in source or output.
+✅ **Phase 2 DONE (commits `f49fa4f`, `b84c090`):** `HoleChartData` ports all 13 Nevron series 1:1 (set/visibility semantics, X=Easting/Y=TVD/Z=Northing, ±20M range guards, view projection) + typed builders for every `Report_*` template; PDFsharp 6 pipeline with cross-platform font resolver + `FontMap` (MS Sans Serif → Helvetica Neue, pt→DIP); zero `System.Drawing`/`WinForms`/`Nevron`/`PdfSharp-1.x`/`CrypKey` references in `src/`; 16 tests green.
 
 ### Phase 3 — Avalonia UI port (bulk of the work)
 Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
