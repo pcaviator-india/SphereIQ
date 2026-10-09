@@ -103,6 +103,30 @@ namespace EzyPlanData
             m_minDlStateColor = SeverityColor.FromSeverity(MinDLSeverity.Ok);
         }
 
+        /// <summary>
+        /// Copies every field from another status instance. Lets the UI reuse a
+        /// single session-owned instance instead of re-binding references.
+        /// </summary>
+        public void CopyFrom(DrillHoleStatus other)
+        {
+            if (other == null)
+            {
+                Reset();
+                return;
+            }
+            m_endOfHoleSurvey = other.m_endOfHoleSurvey;
+            m_straightPathSurvey = other.m_straightPathSurvey;
+            m_surveyAtTargetTVD = other.m_surveyAtTargetTVD;
+            m_currentDistance = other.m_currentDistance;
+            m_straightPathDistance = other.m_straightPathDistance;
+            m_distanceFromTargetAtTargetTVD = other.m_distanceFromTargetAtTargetTVD;
+            m_absoluteSurveyList = other.m_absoluteSurveyList;
+            m_sidetrackSurvey = other.m_sidetrackSurvey;
+            m_minDLStateString = other.m_minDLStateString;
+            m_minDLSeverity = other.m_minDLSeverity;
+            m_minDlStateColor = other.m_minDlStateColor;
+        }
+
         private static MinDLSeverity Classify(SeverityColor color)
         {
             if (color.R == 255 && color.G == 0 && color.B == 0)
