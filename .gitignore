@@ -2,6 +2,7 @@
 bin/
 obj/
 publish/
+artifacts/
 
 # Decompile reconnaissance (regenerable via ilspycmd, not source of truth)
 decompile-recon/

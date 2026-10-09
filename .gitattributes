@@ -1,0 +1,8 @@
+# Line endings: shell scripts and macOS/Unix-side files must stay LF, otherwise
+# build/make-app.sh breaks on the Mac ("syntax error near unexpected token `fi'")
+# the moment Git checks it out on Windows with autocrlf=true.
+*.sh text eol=lf
+*.plist text eol=lf
+*.command text eol=lf
+*.svg text eol=lf
+*.icns -text

@@ -9,6 +9,10 @@
     <LangVersion>latest</LangVersion>
     <RootNamespace>SphereIQ.App</RootNamespace>
     <AssemblyName>SphereIQ</AssemblyName>
+    <!-- Phase 4: single version source for the assembly, the .app bundle's
+         Info.plist and the crash-log banner. build/make-app.sh reads this. -->
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Product>SphereIQ</Product>
   </PropertyGroup>
 
   <ItemGroup>

@@ -196,8 +196,8 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 - [x] Create New Hole wizard (3 steps + native save picker)
 - [x] Charting foundation: `HoleChartData` + OxyPlot `ChartHost` + `HolePlanningEngine` (logic, UI-free, tested)
 - [x] Slice 3: Hole management (+ toolbar)
-- [ ] Slice 4: Hole planning screen (wire engine + ChartHost + result fields)
-- [ ] Slice 4: Hole planning (+ advanced popups)
+- [x] Slice 4 (screen): Hole planning screen wired to `HolePlanningEngine` + `ChartHost` + result fields (`DrillHolePlanningScreen`, commit `aab026f`)
+- [ ] Slice 4 (popups): Hole planning advanced popups (build-to-target, sidetrack, extrapolate, trend analysis)
 - [ ] Slice 5: Edit survey data (grids — heaviest control port)
 - [ ] Slice 6: Import CSV flows (exercises `ICsvReader` + `Body_Import_*`)
 - [ ] Slice 7: Build to target, Extrapolate, Trend analysis, Side track, Edit details (results screens + charts)
@@ -224,6 +224,34 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 **Exit criteria:** all 61 screens functional in Avalonia on macOS arm64.
 
 ### Phase 4 — macOS platform integration
+> 🚧 **Groundwork done (platform-independent part only), commit TBD.** Three
+> items are built and verifiable from Windows because they don't depend on the
+> unfinished UI: **(1)** `build/Info.plist` — bundle id `com.sphereiq.EzyPlan`,
+> `LSMinimumSystemVersion` 11.0, `NSHighResolutionCapable`, plus
+> `.ezn` document-type association via exported UTI `com.sphereiq.ezn`
+> (wrapped by `build/make-app.sh`, `bash -n` clean, LF endings);
+> **(3)** native open/save panels already use Avalonia's
+> `StorageProvider` (Avalonia picks `NSOpenPanel` on macOS automatically, so
+> no new code needed); **(7)** `CrashLog` writes to
+> `~/Library/Application Support/SphereIQ/Logs/sphereiq.log` on Unix and
+> `%APPDATA%\SphereIQ\Logs` on Windows, and routes
+> `AppDomain.UnhandledException`, `TaskScheduler.UnobservedTaskException`,
+> `Dispatcher.UIThread.UnhandledException` and `Avalonia.Logging.Logger`
+> (Warning+) into it — this is the substitute for a debugger, since the dev
+> machine is Windows-only and Finder-launched apps discard stdout.
+> `VersionPrefix` is now the single version source for assembly, `Info.plist`
+> and the log banner.
+>
+> **Verified from Windows:** `dotnet publish -r osx-arm64 --self-contained true
+> -c Release` succeeds → 236 files / 105.5 MB including `libAvaloniaNative.dylib`,
+> `libSkiaSharp.dylib` and the arm64 `coreclr`/`clrjit`, so cross-compilation
+> and the native dependency graph are proven. **Not yet verified:** actual
+> launch, menus (item 2), DiskArbitration (item 4), `NSWorkspace` icons
+> (item 5), Dock behaviour (item 8) and Retina rendering (item 9) — all need
+> the Apple Silicon Mac. Items 2/4/5 also still need the `ISettingsStore`,
+> `IRemovableMediaMonitor` and `IFileIconService` interfaces that Phase 1 §2
+> specified and which do not exist in `src/` yet.
+
 1. **App bundle:** produce `SphereIQ.app` with `Info.plist` (bundle id, version from `Settings.ProductVersion`, `LSMinimumSystemVersion`, document-type associations for the drill-hole file extension, `NSHighResolutionCapable` Retina keys).
 2. **Menus:** native macOS menu bar — app menu (About/Preferences/Quit), Edit menu (Cmd+C/V/Z must work), Window menu; convert `Ctrl` shortcuts to `Cmd`.
 3. **Dialogs:** native open/save panels (macOS `NSOpenPanel` via Avalonia desktop dialogs); sandbox-friendly paths.
