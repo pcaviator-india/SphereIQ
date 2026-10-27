@@ -27,6 +27,8 @@ namespace SphereIQ.App
                     return new Screens.EditSurveyDataScreen(session);
                 case ScreenId.BuildToTarget:
                     return new Screens.BuildToTargetScreen(session);
+                case ScreenId.TrendAnalysis:
+                    return new Screens.TrendAnalysisScreen(session);
                 default:
                     return new Screens.PlaceholderScreen(id);
             }
