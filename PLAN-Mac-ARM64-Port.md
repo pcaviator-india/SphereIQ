@@ -196,9 +196,9 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 - [x] Create New Hole wizard (3 steps + native save picker)
 - [x] Charting foundation: `HoleChartData` + OxyPlot `ChartHost` + `HolePlanningEngine` (logic, UI-free, tested)
 - [x] Slice 3: Hole management (+ toolbar)
-- [x] Slice 4 (screen): Hole planning screen wired to `HolePlanningEngine` + `ChartHost` + result fields (`DrillHolePlanningScreen`, commit `aab026f`)
+- [x] Slice 4 (screen): Hole planning screen wired to `HolePlanningEngine` + `ChartHost` + result fields (`DrillHolePlanningScreen`)
+- [x] Slice 5: Edit survey data (grids — heaviest control port; `EditSurveyDataScreen` compiles, 19 tests green)
 - [ ] Slice 4 (popups): Hole planning advanced popups (build-to-target, sidetrack, extrapolate, trend analysis)
-- [ ] Slice 5: Edit survey data (grids — heaviest control port)
 - [ ] Slice 6: Import CSV flows (exercises `ICsvReader` + `Body_Import_*`)
 - [ ] Slice 7: Build to target, Extrapolate, Trend analysis, Side track, Edit details (results screens + charts)
 - [ ] Slice 8: Reports & preview (`Popup_ReportPreview`, `Popup_Report_*`, Fax screens — **mandatory, zero feature reduction**)
@@ -339,8 +339,14 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 1. ~~Confirm the two open Phase 0 items~~ **DONE — locked:** `net8.0` LTS + Avalonia 11.x.
 2. Acquire an Apple Silicon Mac + enroll in the Apple Developer Program (needed for notarization even for a free app).
 3. ~~Set up repo hygiene (`.gitignore`) and confirm a green baseline Windows build.~~ **DONE — `.gitignore`, baseline commit `132be11` (green net20 build).**
-4. ~~Begin Phase 1 extraction (`SphereIQ.Core`) with unit tests~~ → **IN PROGRESS** — decompile-recon complete (7 DLLs, 91 files inventoried; see §1.2/§1.3). Findings: Fax confirmed report-only; `EzyPlanMath` needs VB runtime NuGet; `EzyPlanStorage` needs `BinaryFormatter` compat work; `EzyPlanData` has 3 small touches; `EzyReport`/`EzyNavCharting` need reimplementation splits.
+4. ~~Begin Phase 1 extraction (`SphereIQ.Core`) with unit tests~~ **DONE —** `SphereIQ.Core` (net8.0, 0 errors, JSON `.ezn` format) + `SphereIQ.Reports` + 19 xUnit tests green; legacy `.ezn` BinaryFormatter detected via magic header with converter guidance.
 5. ~~Run ILSpy reconnaissance~~ **DONE.**
+6. **Build green** — `dotnet build src/SphereIQ.App` succeeds (1 cosmetic warning); `dotnet test` → 19/19 passed.
+7. **Continue Phase 3 slice work:**
+   - Slice 4 popups: BuildToTarget, TrendAnalysis, Extrapolate, SideTrackHole, EditDetails screens (currently `PlaceholderScreen`)
+   - Slice 6: Import CSV flows
+   - Slice 8: Reports & preview (mandatory, zero feature reduction)
+8. **Phase 4 interfaces still missing:** `ISettingsStore`, `IRemovableMediaMonitor`, `IFileIconService` — create these in `SphereIQ.Core` before macOS integration.
 
 ---
 *This plan was produced by static code/dependency analysis only; no application code was modified.*

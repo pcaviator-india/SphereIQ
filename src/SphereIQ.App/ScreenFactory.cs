@@ -23,6 +23,8 @@ namespace SphereIQ.App
                     return new Screens.DrillHolePlanningScreen(session);
                 case ScreenId.HoleManagement:
                     return new Screens.DrillHoleManagementScreen(session);
+                case ScreenId.EditSurveyData:
+                    return new Screens.EditSurveyDataScreen(session);
                 default:
                     return new Screens.PlaceholderScreen(id);
             }

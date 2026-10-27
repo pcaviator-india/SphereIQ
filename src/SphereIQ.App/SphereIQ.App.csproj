@@ -21,6 +21,18 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.4" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.4" />
     <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0" />
+    <!-- Phase 3 slice 5: the legacy Edit Survey Data screen is a WinForms
+         DataGridView (EditMode = EditProgrammatically, i.e. read-only with
+         edits via popups). Avalonia's official DataGrid is the direct port.
+         Upstream marks it deprecated/bug-fix-only and recommends TableView for
+         read-only data and TreeDataGrid for editing, but those are 12.x-only
+         and much larger; DataGrid on the matching 11.1.x line is the lowest
+         risk for the locked Avalonia 11.1.4. Same MIT licence as this project.
+         Version must stay in lockstep with the Avalonia version - DataGrid
+         11.3.13 depends on Avalonia >= 11.3.13 and triggers NU1605.
+         Only the read path (display + multi-select) is used, matching the
+         legacy EditProgrammatically behaviour, so no cell-editing surface. -->
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.4" />
   </ItemGroup>
 
   <ItemGroup>
