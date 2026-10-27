@@ -200,7 +200,8 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 - [x] Slice 5: Edit survey data (grids — heaviest control port; `EditSurveyDataScreen` compiles, 19 tests green)
 - [x] Slice 7 (part 1): Build To Target screen (`BuildToTargetScreen`, select + results views + chart)
 - [x] Slice 4 (popups): Trend Analysis screen (`TrendAnalysisScreen`, range select + results + chart)
-- [ ] Slice 4 (popups): Sidetrack, Extrapolate popups
+- [x] Slice 4 (popups): Extrapolate screen (`ExtrapolateScreen`, entry + results + chart)
+- [ ] Slice 4 (popups): Sidetrack popup
 - [ ] Slice 6: Import CSV flows (exercises `ICsvReader` + `Body_Import_*`)
 - [ ] Slice 7 (part 2): Side track, Edit details screens (currently `PlaceholderScreen`)
 - [ ] Slice 8: Reports & preview (`Popup_ReportPreview`, `Popup_Report_*`, Fax screens — **mandatory, zero feature reduction**)
@@ -345,7 +346,7 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 5. ~~Run ILSpy reconnaissance~~ **DONE.**
 6. **Build green** — `dotnet build src/SphereIQ.App` succeeds (1 cosmetic warning); `dotnet test` → 19/19 passed.
 7. **Continue Phase 3 slice work:**
-   - Slice 4 popups: Sidetrack, Extrapolate popups (currently `PlaceholderScreen`)
+   - Slice 4 popups: Sidetrack popup (currently `PlaceholderScreen`)
    - Slice 6: Import CSV flows
    - Slice 7 (part 2): Side track, Edit details screens (currently `PlaceholderScreen`)
    - Slice 8: Reports & preview (mandatory, zero feature reduction)

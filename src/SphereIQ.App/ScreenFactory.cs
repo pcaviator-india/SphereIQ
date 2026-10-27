@@ -29,6 +29,8 @@ namespace SphereIQ.App
                     return new Screens.BuildToTargetScreen(session);
                 case ScreenId.TrendAnalysis:
                     return new Screens.TrendAnalysisScreen(session);
+                case ScreenId.Extrapolate:
+                    return new Screens.ExtrapolateScreen(session);
                 default:
                     return new Screens.PlaceholderScreen(id);
             }
