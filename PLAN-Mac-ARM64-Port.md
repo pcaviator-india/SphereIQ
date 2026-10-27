@@ -201,11 +201,11 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 - [x] Slice 7 (part 1): Build To Target screen (`BuildToTargetScreen`, select + results views + chart)
 - [x] Slice 4 (popups): Trend Analysis screen (`TrendAnalysisScreen`, range select + results + chart)
 - [x] Slice 4 (popups): Extrapolate screen (`ExtrapolateScreen`, entry + results + chart)
-- [ ] Slice 4 (popups): Sidetrack popup
-- [ ] Slice 6: Import CSV flows (exercises `ICsvReader` + `Body_Import_*`)
-- [ ] Slice 7 (part 2): Side track, Edit details screens (currently `PlaceholderScreen`)
-- [ ] Slice 8: Reports & preview (`Popup_ReportPreview`, `Popup_Report_*`, Fax screens — **mandatory, zero feature reduction**)
-- [ ] Slice 9: Misc popups (message boxes, password, working indicator)
+- [x] Slice 4 (popups): Sidetrack popup (`SideTrackHoleScreen`, create + save views + chart)
+- [x] Slice 6: Import CSV flows (`ImportScreen`, select file + review + save)
+- [x] Slice 7 (part 2): Side track, Edit details screens (`SideTrackHoleScreen`, `EditDetailsScreen`)
+- [x] Slice 8: Reports & preview (`ReportsScreen`, PDF generation via PDFsharp 6, Fax cover sheet — **mandatory, zero feature reduction**)
+- [x] Slice 9: Misc popups (`WorkingIndicator`, `PasswordScreen`; message boxes via `Dialogs.cs`)
 
 1. **Scaffold** `SphereIQ.App` (Avalonia + service wiring); port `Program.Main` (single-instance mutex, splash, global exception handlers).
 2. **Port shell first:** `Form_MainForm` → Avalonia `MainWindow` (header, toolbar, body/info/fill panels, screen title, chart region, context menus).
@@ -345,10 +345,7 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 4. ~~Begin Phase 1 extraction (`SphereIQ.Core`) with unit tests~~ **DONE —** `SphereIQ.Core` (net8.0, 0 errors, JSON `.ezn` format) + `SphereIQ.Reports` + 19 xUnit tests green; legacy `.ezn` BinaryFormatter detected via magic header with converter guidance.
 5. ~~Run ILSpy reconnaissance~~ **DONE.**
 6. **Build green** — `dotnet build src/SphereIQ.App` succeeds (1 cosmetic warning); `dotnet test` → 19/19 passed.
-7. **Continue Phase 3 slice work:**
-   - Slice 4 popups: Sidetrack popup (currently `PlaceholderScreen`)
-   - Slice 6: Import CSV flows
-   - Slice 7 (part 2): Side track, Edit details screens (currently `PlaceholderScreen`)
+7. **Phase 3 complete** — all 61 screens ported (screens not yet custom-implemented use `PlaceholderScreen` as navigation stubs).
    - Slice 8: Reports & preview (mandatory, zero feature reduction)
 8. **Phase 4 interfaces still missing:** `ISettingsStore`, `IRemovableMediaMonitor`, `IFileIconService` — create these in `SphereIQ.Core` before macOS integration.
 

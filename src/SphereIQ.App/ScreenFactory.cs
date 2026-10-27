@@ -31,6 +31,14 @@ namespace SphereIQ.App
                     return new Screens.TrendAnalysisScreen(session);
                 case ScreenId.Extrapolate:
                     return new Screens.ExtrapolateScreen(session);
+                case ScreenId.SideTrackHole:
+                    return new Screens.SideTrackHoleScreen(session);
+                case ScreenId.EditDetails:
+                    return new Screens.EditDetailsScreen(session);
+                case ScreenId.Import:
+                    return new Screens.ImportScreen(session);
+                case ScreenId.Reports:
+                    return new Screens.ReportsScreen(session);
                 default:
                     return new Screens.PlaceholderScreen(id);
             }
