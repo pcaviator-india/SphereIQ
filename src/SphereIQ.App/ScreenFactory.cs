@@ -25,6 +25,8 @@ namespace SphereIQ.App
                     return new Screens.DrillHoleManagementScreen(session);
                 case ScreenId.EditSurveyData:
                     return new Screens.EditSurveyDataScreen(session);
+                case ScreenId.BuildToTarget:
+                    return new Screens.BuildToTargetScreen(session);
                 default:
                     return new Screens.PlaceholderScreen(id);
             }
