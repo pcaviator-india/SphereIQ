@@ -33,7 +33,7 @@ namespace SphereIQ.App
 
                 desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnMainWindowClose;
 
-                MainWindow window = new MainWindow(Session);
+                MainWindow window = new MainWindow(Session, Program.InitialFilePath);
                 desktop.MainWindow = window;
                 CrashLog.Write("ui", "MainWindow created");
             }

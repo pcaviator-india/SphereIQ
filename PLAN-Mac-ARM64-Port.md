@@ -340,14 +340,23 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 
 ## 8. Immediate Next Actions
 1. ~~Confirm the two open Phase 0 items~~ **DONE — locked:** `net8.0` LTS + Avalonia 11.x.
-2. Acquire an Apple Silicon Mac + enroll in the Apple Developer Program (needed for notarization even for a free app).
+2. ~~Acquire an Apple Silicon Mac + enroll in the Apple Developer Program~~ **IN PROGRESS —** needed for notarization even for a free app.
 3. ~~Set up repo hygiene (`.gitignore`) and confirm a green baseline Windows build.~~ **DONE — `.gitignore`, baseline commit `132be11` (green net20 build).**
 4. ~~Begin Phase 1 extraction (`SphereIQ.Core`) with unit tests~~ **DONE —** `SphereIQ.Core` (net8.0, 0 errors, JSON `.ezn` format) + `SphereIQ.Reports` + 19 xUnit tests green; legacy `.ezn` BinaryFormatter detected via magic header with converter guidance.
 5. ~~Run ILSpy reconnaissance~~ **DONE.**
-6. **Build green** — `dotnet build src/SphereIQ.App` succeeds (1 cosmetic warning); `dotnet test` → 19/19 passed.
-7. **Phase 3 complete** — all 61 screens ported (screens not yet custom-implemented use `PlaceholderScreen` as navigation stubs).
-   - Slice 8: Reports & preview (mandatory, zero feature reduction)
-8. **Phase 4 interfaces still missing:** `ISettingsStore`, `IRemovableMediaMonitor`, `IFileIconService` — create these in `SphereIQ.Core` before macOS integration.
+6. **Build green** — `dotnet build src/SphereIQ.App` succeeds (2 cosmetic warnings); `dotnet test` → 19/19 passed.
+7. **Phase 3 complete** — all screen slices ported (Welcome, Open/Create, Hole Management, Hole Planning, Edit Survey Data, Build To Target, Trend Analysis, Extrapolate, Side Track, Edit Details, Import, Reports).
+8. **Phase 4 in progress:**
+   - ~~`ISettingsStore` / `JsonSettingsStore`~~ **DONE** — JSON settings store in `SphereIQ.Core.Data`
+   - ~~`IRemovableMediaMonitor`~~ **DONE** — interface + `MediaEventArgs` in `SphereIQ.Core.Data`
+   - ~~`IFileIconService`~~ **DONE** — interface in `SphereIQ.Core.Data`
+   - ~~macOS menu bar~~ **DONE** — App (About/Preferences/Quit), File, Edit (Cmd shortcuts), Window menus in `MainWindow.axaml`
+   - ~~File association / command-line args~~ **DONE** — `Program.InitialFilePath` → `MainWindow` → `OpenHoleFile`
+   - [ ] DiskArbitration implementation for macOS (removable media)
+   - [ ] `NSWorkspace` file icon implementation for macOS
+   - [ ] Single-instance activation (bring existing window to front on second launch)
+   - [ ] App bundle packaging (`build/make-app.sh` tested)
+   - [ ] Codesigning + notarization (Phase 5)
 
 ---
 *This plan was produced by static code/dependency analysis only; no application code was modified.*

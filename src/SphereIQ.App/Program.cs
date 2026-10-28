@@ -6,6 +6,12 @@ namespace SphereIQ.App
 {
     internal static class Program
     {
+        /// <summary>
+        /// Initial file path from command-line args (e.g. macOS Finder double-click).
+        /// Read by <see cref="App"/> to open the file on startup.
+        /// </summary>
+        public static string? InitialFilePath { get; private set; }
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -37,6 +43,8 @@ namespace SphereIQ.App
                 filePath = filePath.Trim();
             }
             CrashLog.Write("args", "count=" + (args == null ? 0 : args.Length) + " file='" + filePath + "'");
+
+            InitialFilePath = filePath;
 
             bool createdNew;
             using (System.Threading.Mutex mutex = new System.Threading.Mutex(true, "PCAVIATOR SphereIQ", out createdNew))

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
 
 namespace SphereIQ.App
 {
@@ -18,7 +21,7 @@ namespace SphereIQ.App
         {
         }
 
-        public MainWindow(AppSession session)
+        public MainWindow(AppSession session, string? initialFilePath = null)
         {
             _session = session;
             InitializeComponent();
@@ -27,7 +30,14 @@ namespace SphereIQ.App
             {
                 _session.FileChanged += delegate { UpdateHeader(); };
             }
-            NavigateTo(ScreenId.Welcome, null);
+            if (!string.IsNullOrEmpty(initialFilePath))
+            {
+                NavigateTo(ScreenId.OpenHoleFile, initialFilePath);
+            }
+            else
+            {
+                NavigateTo(ScreenId.Welcome, null);
+            }
         }
 
         private void InitializeComponent()
@@ -143,6 +153,51 @@ namespace SphereIQ.App
         private void OnExit(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        // --- Menu event handlers ---
+
+        private void OnAbout(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Dialogs.ShowMessageAsync(this, "About SphereIQ",
+                "SphereIQ (Ezy-Nav) v" + (_session?.ProductVersion ?? "1.0") +
+                "\n\nmacOS Apple Silicon port.\nDrill hole planning and survey software.");
+        }
+
+        private void OnPreferences(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Preferences not yet implemented - open Edit Details as placeholder
+            NavigateTo(ScreenId.EditDetails, _session.CurrentFilePath);
+        }
+
+        private void OnQuit(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void OnOpenFileMenu(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            NavigateTo(ScreenId.OpenHoleFile, _session.CurrentFilePath);
+        }
+
+        private void OnCreateNewHole(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            NavigateTo(ScreenId.CreateNewHole, _session.CurrentFilePath);
+        }
+
+        private void OnCloseHole(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            NavigateTo(ScreenId.Welcome, null);
+        }
+
+        private void OnExitMenu(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void OnMinimize(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            WindowState = Avalonia.Controls.WindowState.Minimized;
         }
     }
 }

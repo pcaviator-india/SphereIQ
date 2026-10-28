@@ -4,20 +4,54 @@
         Title="SphereIQ"
         Width="1100" Height="760"
         MinWidth="960" MinHeight="600">
-  <Grid RowDefinitions="Auto,*">
-    <Border Grid.Row="0" Background="#F5F6F8" Padding="16,10">
-      <Grid ColumnDefinitions="*,Auto">
-        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-          <TextBlock x:Name="TitleText" FontSize="20" FontWeight="SemiBold" Text="Welcome" />
-          <TextBlock x:Name="SubtitleText" FontSize="12" Opacity="0.6" Text="" />
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
-          <TextBlock x:Name="HoleFileText" FontSize="12" Opacity="0.7" VerticalAlignment="Center" Text="" />
-          <Button x:Name="BackButton" Content="Back" IsVisible="False" Click="OnBack" />
-          <Button x:Name="ExitButton" Content="Exit" Click="OnExit" />
-        </StackPanel>
-      </Grid>
-    </Border>
-    <ContentControl x:Name="ScreenHost" Grid.Row="1" />
-  </Grid>
+  <DockPanel>
+    <Menu DockPanel.Dock="Top" Name="MainMenu">
+      <MenuItem Header="SphereIQ">
+        <MenuItem Header="About SphereIQ" Click="OnAbout" InputGesture="A,Meta" />
+        <Separator />
+        <MenuItem Header="Preferences..." Click="OnPreferences" />
+        <Separator />
+        <MenuItem Header="Quit SphereIQ" Click="OnQuit" InputGesture="Q,Meta" />
+      </MenuItem>
+      <MenuItem Header="File">
+        <MenuItem Header="Open Hole File..." Click="OnOpenFileMenu" InputGesture="O,Meta" />
+        <MenuItem Header="Create New Hole..." Click="OnCreateNewHole" InputGesture="N,Meta" />
+        <Separator />
+        <MenuItem Header="Close Hole" Click="OnCloseHole" InputGesture="W,Meta" />
+        <Separator />
+        <MenuItem Header="Exit" Click="OnExitMenu" InputGesture="Q,Meta,Shift" />
+      </MenuItem>
+      <MenuItem Header="Edit">
+        <MenuItem Header="Undo" InputGesture="Z,Meta" IsEnabled="False" />
+        <MenuItem Header="Redo" InputGesture="Z,Meta,Shift" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="Cut" InputGesture="X,Meta" IsEnabled="False" />
+        <MenuItem Header="Copy" InputGesture="C,Meta" IsEnabled="False" />
+        <MenuItem Header="Paste" InputGesture="V,Meta" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="Select All" InputGesture="A,Meta" IsEnabled="False" />
+      </MenuItem>
+      <MenuItem Header="Window">
+        <MenuItem Header="Minimize" Click="OnMinimize" InputGesture="M,Meta" />
+        <Separator />
+        <MenuItem Header="Bring All to Front" />
+      </MenuItem>
+    </Menu>
+    <Grid DockPanel.Dock="Bottom" RowDefinitions="Auto,*">
+      <Border Grid.Row="0" Background="#F5F6F8" Padding="16,10">
+        <Grid ColumnDefinitions="*,Auto">
+          <StackPanel Grid.Column="0" VerticalAlignment="Center">
+            <TextBlock x:Name="TitleText" FontSize="20" FontWeight="SemiBold" Text="Welcome" />
+            <TextBlock x:Name="SubtitleText" FontSize="12" Opacity="0.6" Text="" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="12">
+            <TextBlock x:Name="HoleFileText" FontSize="12" Opacity="0.7" VerticalAlignment="Center" Text="" />
+            <Button x:Name="BackButton" Content="Back" IsVisible="False" Click="OnBack" />
+            <Button x:Name="ExitButton" Content="Exit" Click="OnExit" />
+          </StackPanel>
+        </Grid>
+      </Border>
+      <ContentControl x:Name="ScreenHost" Grid.Row="1" />
+    </Grid>
+  </DockPanel>
 </Window>
