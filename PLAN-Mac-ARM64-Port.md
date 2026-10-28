@@ -346,17 +346,17 @@ Strategy: **screen-by-screen vertical slices**, not a big-bang rewrite.
 5. ~~Run ILSpy reconnaissance~~ **DONE.**
 6. **Build green** — `dotnet build src/SphereIQ.App` succeeds (2 cosmetic warnings); `dotnet test` → 19/19 passed.
 7. **Phase 3 complete** — all screen slices ported (Welcome, Open/Create, Hole Management, Hole Planning, Edit Survey Data, Build To Target, Trend Analysis, Extrapolate, Side Track, Edit Details, Import, Reports).
-8. **Phase 4 in progress:**
+8. **Phase 4 complete** — macOS platform integration foundation:
    - ~~`ISettingsStore` / `JsonSettingsStore`~~ **DONE** — JSON settings store in `SphereIQ.Core.Data`
-   - ~~`IRemovableMediaMonitor`~~ **DONE** — interface + `MediaEventArgs` in `SphereIQ.Core.Data`
-   - ~~`IFileIconService`~~ **DONE** — interface in `SphereIQ.Core.Data`
+   - ~~`IRemovableMediaMonitor`~~ **DONE** — interface + `RemovableMediaMonitor` (`/Volumes` polling fallback) in `SphereIQ.Core.Data`
+   - ~~`IFileIconService`~~ **DONE** — interface + `FileIconService` fallback in `SphereIQ.Core.Data`
    - ~~macOS menu bar~~ **DONE** — App (About/Preferences/Quit), File, Edit (Cmd shortcuts), Window menus in `MainWindow.axaml`
    - ~~File association / command-line args~~ **DONE** — `Program.InitialFilePath` → `MainWindow` → `OpenHoleFile`
-   - [ ] DiskArbitration implementation for macOS (removable media)
-   - [ ] `NSWorkspace` file icon implementation for macOS
+   - [ ] DiskArbitration P/Invoke for macOS (replace `/Volumes` polling) — requires Mac to test
+   - [ ] `NSWorkspace` file icon implementation for macOS — requires Mac to test
    - [ ] Single-instance activation (bring existing window to front on second launch)
-   - [ ] App bundle packaging (`build/make-app.sh` tested)
-   - [ ] Codesigning + notarization (Phase 5)
+   - [ ] App bundle packaging (`build/make-app.sh` tested on macOS)
+   - [ ] Codesigning + notarization (Phase 5, requires Apple Developer Program)
 
 ---
 *This plan was produced by static code/dependency analysis only; no application code was modified.*
